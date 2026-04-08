@@ -76,7 +76,7 @@ function Landing() {
               color: '#ffffff',
               margin: 0
             }}>
-              Transportes Jara
+              CORPORACION YOSMEL & HNOS S.A.C
             </h2>
             <p style={{ fontSize: '0.7rem', color: '#cbd5e0', margin: 0 }}>
               Movemos tu carga con seguridad y eficiencia en todo el Perú
