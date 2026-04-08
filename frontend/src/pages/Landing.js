@@ -24,7 +24,7 @@ function Landing() {
     { 
       name: 'Especial', 
       description: 'Soluciones personalizadas para cargas de dimensiones o requerimientos especiales.',
-      image: '/camion1.avif', // Asegúrate de tener esta imagen en tu carpeta pública
+      image: '/camion1.avif', 
       alt: 'Camión para carga especial'
     }
   ];
@@ -76,10 +76,10 @@ function Landing() {
               color: '#ffffff',
               margin: 0
             }}>
-              Transportes Yei Yei
+              Transportes Jara
             </h2>
             <p style={{ fontSize: '0.7rem', color: '#cbd5e0', margin: 0 }}>
-              Movemos tu caja con seguridad XD
+              Movemos tu carga con seguridad y eficiencia en todo el Perú
             </p>
           </div>
 
