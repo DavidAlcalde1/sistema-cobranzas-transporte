@@ -2,16 +2,45 @@ const sqlite3 = require('sqlite3').verbose();
 const { Pool } = require('pg');
 const path = require('path');
 
-// Determinar qué base de datos usar
+// Variables de entorno para depuración
+console.log('🔍 DEBUG - NODE_ENV:', JSON.stringify(process.env.NODE_ENV));
+console.log('🔍 DEBUG - DATABASE_URL exists:', !!process.env.DATABASE_URL);
+console.log('🔍 DEBUG - USE_POSTGRES:', process.env.USE_POSTGRES);
+
+// Determinar qué base de datos usar (MÁS FLEXIBLE)
 let query, run, db;
 
-if (process.env.DATABASE_URL && process.env.NODE_ENV === 'production') {
+// Condición mejorada: acepta varias formas de activar PostgreSQL
+const usarPostgres = process.env.DATABASE_URL && (
+  process.env.NODE_ENV === 'production' ||
+  process.env.NODE_ENV === 'Production' ||
+  process.env.USE_POSTGRES === 'true' ||
+  process.env.FORCE_POSTGRES === '1'
+);
+
+console.log('🔍 DEBUG - usarPostgres:', usarPostgres);
+
+if (usarPostgres) {
   // ============================================
   // MODO PRODUCCIÓN: PostgreSQL (Northflank)
   // ============================================
+  console.log('📊 Conectando a PostgreSQL...');
+  
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
+    max: 10, // Máximo de conexiones
+    idleTimeoutMillis: 30000,
+  });
+
+  // Probar conexión
+  pool.connect((err, client, release) => {
+    if (err) {
+      console.error('❌ Error conectando a PostgreSQL:', err.message);
+    } else {
+      console.log('✅ Conectado a PostgreSQL correctamente');
+      release();
+    }
   });
 
   // query para SELECT
@@ -43,6 +72,8 @@ if (process.env.DATABASE_URL && process.env.NODE_ENV === 'production') {
   // ============================================
   // MODO DESARROLLO: SQLite (local)
   // ============================================
+  console.log('📊 Usando SQLite (modo desarrollo)');
+  
   const dbPath = path.join(__dirname, '../../database/fletes.db');
   const sqliteDb = new sqlite3.Database(dbPath, (err) => {
     if (err) {
