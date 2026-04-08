@@ -72,7 +72,7 @@ if (usarPostgres) {
   // ============================================
   // MODO DESARROLLO: SQLite (local)
   // ============================================
-  console.log('📊 Usando SQLite (modo desarrollo)');
+  console.log('📊 Usando SQLite (modo desarrollo) - VERSION_FORZADA_2');
   
   const dbPath = path.join(__dirname, '../../database/fletes.db');
   const sqliteDb = new sqlite3.Database(dbPath, (err) => {
