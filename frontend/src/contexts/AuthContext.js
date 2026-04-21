@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       return { success: true };
     } catch (error) {
+      console.error('Error en login:', error);
       return { 
         success: false, 
         error: error.response?.data?.error || 'Error al iniciar sesión' 
