@@ -6,10 +6,34 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const JWT_SECRET = process.env.JWT_SECRET || 'mi_secreto_por_defecto';
+
+// ========== CONFIGURACIÓN CORS PARA PRODUCCIÓN ==========
+// Lista de orígenes permitidos
+const allowedOrigins = [
+  'https://site--frontend-cobranzas--b8r4vf6vdbjv.code.run',
+  'http://localhost:3000',  // Desarrollo local
+  'http://localhost:3001'   // Pruebas locales
+];
+
+// Configuración CORS
+app.use(cors({
+  origin: function(origin, callback) {
+    // Permitir peticiones sin origen (como Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('❌ Origen bloqueado por CORS:', origin);
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Rutas
@@ -49,8 +73,8 @@ app.get('/', (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n🚀 Servidor corriendo en http://0.0.0.0:${PORT}`);
   console.log(`📊 Base de datos: SQLite`);
   console.log(`📋 Endpoints disponibles:`);
   console.log(`   - POST /api/auth/login`);
