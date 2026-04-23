@@ -79,6 +79,7 @@ if (usarPostgres) {
     } else {
       console.log('✅ Conectado a SQLite correctamente');
       
+      sqliteDb.serialize(() => {
       // ========== CREAR TABLAS ==========
       
       // Tabla users
@@ -157,7 +158,9 @@ if (usarPostgres) {
       
       console.log('✅ Todas las tablas creadas/verificadas');
       
-      // ========== INSERTAR USUARIO ADMIN ==========
+      console.log('✅ Todas las tablas creadas/verificadas');
+      
+      // ========== INSERTAR USUARIO ADMIN (después de crear tablas) ==========
       const hashedPassword = bcrypt.hashSync('admin123', 10);
       sqliteDb.run(`INSERT OR IGNORE INTO users (username, password, full_name, role, active) 
         VALUES ('admin', ?, 'Administrador', 'admin', 'SI')`, [hashedPassword], function(err) {
@@ -169,8 +172,9 @@ if (usarPostgres) {
           console.log('✅ Usuario admin ya existe');
         }
       });
-    }
-  });
+    });
+  }
+});
   
   // query para SELECT
   query = (sql, params = []) => {
