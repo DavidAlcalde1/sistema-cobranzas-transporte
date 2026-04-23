@@ -7,26 +7,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ========== CONFIGURACIÓN CORS CORREGIDA ==========
-// Elimina la línea problemática: app.options('*', cors(corsOptions));
-// Usa esta configuración en su lugar:
-
+// Configuración CORS simple y efectiva
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-// Middleware para asegurar que las peticiones OPTIONS respondan correctamente
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    return res.sendStatus(200);
-  }
-  next();
-});
 
 app.use(express.json());
 

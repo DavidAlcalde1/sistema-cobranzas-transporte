@@ -11,12 +11,7 @@ console.log('🔍 DEBUG - USE_POSTGRES:', process.env.USE_POSTGRES);
 let query, run, db;
 
 // Condición mejorada: acepta varias formas de activar PostgreSQL
-const usarPostgres = process.env.DATABASE_URL && (
-  process.env.NODE_ENV === 'production' ||
-  process.env.NODE_ENV === 'Production' ||
-  process.env.USE_POSTGRES === 'true' ||
-  process.env.FORCE_POSTGRES === '1'
-);
+const usarPostgres = false;
 
 console.log('🔍 DEBUG - usarPostgres:', usarPostgres);
 
